@@ -2,29 +2,47 @@
   <header>
     <h1>My Friends</h1>
   </header>
+  <new-friend @add-contact="addContact"></new-friend>
   <ul>
     <!--<FriendContact v-for="elm in friends" v-bind:friend-name="elm.name" v-bind:friend-phone="elm.phone" v-bind:friend-email="elm.email" :key="elm.id"/>-->
-    <FriendContact v-for="elm in friends" :friend="elm" :key="elm.id"/>
+    <FriendContact v-for="elm in friends" :key="elm.id" :friend="elm" @toggle-favourite="toggleFavouriteStatus" @delete="deleteContact"/>
   </ul>
 </template>
 
+
+
 <script>
-import FriendContact from "./components/FriendContact.vue";
+import FriendContact from './components/FriendContact.vue';
 
 export default {
   name: "App",
-  //Components configured like this are only avilable locally
+  //Components configured like this are only available locally
   components: {
     FriendContact,
   },
   data: () => ({
     friends: [
-      {id: "Manuel", name: "Manuel Lopez", phone: "123 456 789", email: "app@app.com"},
-      {id: "Lola", name: "Lola Bunny", phone: "098 765 432", email: "lola@bunny.com"},
+      {id: "Manuel", name: "Manuel Lopez", phone: "123 456 789", email: "app@app.com", isFav: true},
+      {id: "Lola", name: "Lola Bunny", phone: "098 765 432", email: "lola@bunny.com", isFav: false},
     ]
-  })
+  }),
+  methods: {
+    toggleFavouriteStatus(friendId) {
+      const selectedFriend = this.friends.find(elm => elm.id === friendId)
+      selectedFriend.isFav = !selectedFriend.isFav
+    },
+    addContact(name, phone, email) {
+      const contact = {id: new Date().toISOString, name: name, phone: phone, email: email, isFav: false}
+      this.friends.unshift(contact)
+    },
+    deleteContact(friendId) {
+      this.friends = this.friends.filter(elm => elm.id !== friendId)
+    }
+  }
 };
 </script>
+
+
 
 <style>
 * {
@@ -52,7 +70,7 @@ header {
   padding: 0;
   list-style: none;
 }
-#app li {
+#app li, form {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   margin: 1rem auto;
   border-radius: 10px;
@@ -81,5 +99,18 @@ header {
   background-color: #ec3169;
   border-color: #ec3169;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.26);
+}
+#app input {
+  font: inherit;
+  padding: 0.15rem;
+}
+#app label {
+  font-weight: bold;
+  margin-right: 1rem;
+  width: 7rem;
+  display: inline-block;
+}
+#app form div {
+  margin: 1rem 0;
 }
 </style>
