@@ -9,7 +9,7 @@
       >Add new resource</base-button
     >
   </base-card>
-  <component :is="selectedTab"></component>
+  <keep-alive><component :is="selectedTab"></component></keep-alive>
 </template>
 
 
@@ -37,19 +37,26 @@ export default {
     ],
   }),
   provide() {
-    return { resources: this.storedResources };
+    return { resources: this.storedResources, addResource: this.addResource, removeResource: this.removeResource };
   },
   //   provide: () => ({
   //      resources: this.storedResources       => cannot read property storedResources of undefined => this is undefined because of arrow function
   //   }),
   computed: {
-     listButtonMode() {return this.selectedTab === 'resources-list' ? null : 'flat'}
+     listButtonMode() {return this.selectedTab === 'resources-list' ? null : 'flat'},
      addButtonMode() {return this.selectedTab === 'add-resource' ? null : 'flat'}
-  }
+  },
   methods: {
-    setSelectedTab(tab) {
-      this.selectedTab = tab;
+    setSelectedTab(tab) { this.selectedTab = tab },
+    addResource(data) {
+      const newResource = {...data, id: new Date().toISOString()}
+      this.storedResources.unshift(newResource)
+      this.selectedTab = 'resources-list'
     },
+    removeResource(resId) {
+      const resIdx = this.storedResources.findIndex(elm => elm.id === resId)
+      this.storedResources.splice(resIdx, 1)
+    }
   },
 };
 </script>

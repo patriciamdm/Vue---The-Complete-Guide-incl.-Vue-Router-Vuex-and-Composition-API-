@@ -10,8 +10,9 @@ import TheResources from "./components/resources/TheResources.vue";
 
 export default {
   components: {
-    TheHeader, TheResources
-  }
+    TheHeader,
+    TheResources,
+  },
 };
 </script>
 
