@@ -6,7 +6,7 @@
       <base-card>
          <div class="controls">
             <base-button mode="outline">Refresh coaches</base-button>
-            <base-button link to="/register">Register as Coach</base-button>
+            <base-button link to="/register" v-if="!isCoach">Register as Coach</base-button>
          </div>
          <ul v-if="hasCoaches">
             <CoachItem v-for="elm in filteredCoaches" :key="elm.id" :coach="elm" />
@@ -40,7 +40,8 @@ export default {
             return false;
          })
       },
-      hasCoaches() { return this.$store.getters['coaches/hasCoaches'] }
+      hasCoaches() { return this.$store.getters['coaches/hasCoaches'] },
+      isCoach() { return this.$store.getters['coaches/isCoach'] }
    },
    methods: {
       setFilters(updatedFilters) { this.activeFilters = updatedFilters }
