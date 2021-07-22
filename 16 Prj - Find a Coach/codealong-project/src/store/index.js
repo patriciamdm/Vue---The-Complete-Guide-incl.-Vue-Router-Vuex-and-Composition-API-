@@ -10,7 +10,7 @@ const store = createStore({
       requests: requestsModule
    },
    state: () => ({
-      userId: '123456'
+      userId: 'c3'
    }),
    getters: {
       getUserId(state) { return state.userId; }
